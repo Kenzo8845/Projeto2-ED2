@@ -162,3 +162,5 @@ void quadra_setCorb(const Quadra q, const char* novoCorb);
  * @param q A quadra a ser alterada.
  * @param novoSw A nova largura de borda.
  */
+
+ #endif
