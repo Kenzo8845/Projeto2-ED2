@@ -31,7 +31,8 @@ typedef struct Hash Hash;
 Hash *hash_create(int capacidade_bucket);
 
 /**
- * @brief Destroi a hash, liberando toda a memória interna (diretório, buckets e as cópias dos dados armazenados).
+ * @brief Destroi a hash, liberando toda a memória interna (diretório, 
+ * buckets e as cópias dos dados armazenados).
  * @param h Hash a ser destruída.
  */
 void hash_destroy(Hash *h);
@@ -41,7 +42,8 @@ void hash_destroy(Hash *h);
 //******************************************** //
 
 /**
- * @brief Insere um dado na hash sob a chave informada. A hash copia 'tamanho' bytes a partir de 'dado' para armazenamento interno.
+ * @brief Insere um dado na hash sob a chave informada. A hash copia 
+ * tamanho' bytes a partir de 'dado' para armazenamento interno.
  * @param h Hash onde inserir.
  * @param chave Chave do registro.
  * @param dado Ponteiro para os dados a serem copiados e armazenados.
@@ -55,7 +57,8 @@ bool hash_insert(Hash *h, uint64_t chave, const void *dado, size_t tamanho);
  * @param h Hash onde buscar.
  * @param chave Chave buscada.
  * @param tamanho Se não for NULL, recebe o tamanho em bytes do dado encontrado.
- * @return void* Cópia recém-alocada dos dados encontrados (o chamador deve dar free ou usar o destructor apropriado), ou NULL se não encontrado.
+ * @return void* Cópia recém-alocada dos dados encontrados (o chamador deve
+ * dar free ou usar o destructor apropriado), ou NULL se não encontrado.
  */
 void *hash_search(const Hash *h, uint64_t chave, size_t *tamanho);
 
@@ -64,7 +67,8 @@ void *hash_search(const Hash *h, uint64_t chave, size_t *tamanho);
  * @param h Hash de onde remover.
  * @param chave Chave a ser removida.
  * @param tamanho Se não for NULL, recebe o tamanho em bytes do dado removido.
- * @return void* Cópia dos dados removidos (o chamador deve liberar), ou NULL se a chave não existia.
+ * @return void* Cópia dos dados removidos (o chamador deve liberar), ou 
+ * NULL se a chave não existia.
  */
 void *hash_remove(Hash *h, uint64_t chave, size_t *tamanho);
 
@@ -96,8 +100,10 @@ int hash_get_global_depth(const Hash *h);
 typedef void (*HashCallback)(uint64_t chave, void *dado, size_t tamanho, void *contexto);
 
 /**
- * @brief Percorre todos os registros válidos da hash, chamando o callback para cada um. 
- * Não copia os dados: o callback recebe um ponteiro direto para o armazenamento interno e não deve alterá-lo nem liberá-lo.
+ * @brief Percorre todos os registros válidos da hash, chamando o callback 
+ * para cada um. Não copia os dados: o callback recebe um ponteiro 
+ * direto para o armazenamento interno e não deve alterá-lo nem 
+ * liberá-lo.
  * @param h A hash a ser percorrida.
  * @param callback Função chamada para cada registro.
  * @param contexto Ponteiro repassado a cada chamada do callback.
@@ -106,7 +112,8 @@ void hash_foreach(const Hash *h, HashCallback callback, void *contexto);
 
 /**
  * @brief Imprime um dump textual do estado interno da hash (diretório, 
- * buckets, profundidades locais e chaves armazenadas) em 'saida'. Útil para depuração.
+ * buckets, profundidades locais e chaves armazenadas) em 'saida'.
+ * Útil para depuração.
  * @param h A hash.
  * @param saida Arquivo já aberto onde o dump será escrito.
  */
@@ -117,7 +124,8 @@ void hash_dump(const Hash *h, FILE *saida);
 //******************************************** //
 
 /**
- * @brief Função hash de string (djb2), útil para transformar CEPs, ids de vértice, etc. em chaves uint64_t.
+ * @brief Função hash de string (djb2), útil para transformar CEPs, ids de 
+ * vértice, etc. em chaves uint64_t.
  * @param str String a ser transformada em chave.
  * @return uint64_t Chave resultante.
  */
