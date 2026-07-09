@@ -6,7 +6,7 @@
 static Hash *h;
 
 void setUp(void) {
-    h = hash_create(2); /* 2 registros por bucket — forca splits cedo nos testes */
+    h = hash_create(2); 
 }
 
 void tearDown(void) {
@@ -63,17 +63,16 @@ void test_insert_e_search_de_struct(void) {
 }
 
 void test_search_retorna_copia_independente(void) {
-    /* Alterar a copia retornada NAO pode alterar o dado interno da hash */
     int valor = 10;
     hash_insert(h, 5, &valor, sizeof(int));
 
     size_t tamanho;
     int *copia1 = hash_search(h, 5, &tamanho);
-    *copia1 = 999; /* modifica so a copia */
+    *copia1 = 999; 
     free(copia1);
 
     int *copia2 = hash_search(h, 5, &tamanho);
-    TEST_ASSERT_EQUAL_INT(10, *copia2); /* valor interno continua o original */
+    TEST_ASSERT_EQUAL_INT(10, *copia2); 
     free(copia2);
 }
 
@@ -91,7 +90,6 @@ void test_remove_deve_remover_e_retornar_o_dado(void) {
     TEST_ASSERT_EQUAL_INT(123, *removido);
     free(removido);
 
-    /* Apos remover, a busca nao deve mais encontrar */
     void *busca = hash_search(h, 50, &tamanho);
     TEST_ASSERT_NULL(busca);
 }
@@ -109,7 +107,6 @@ void test_remove_chave_inexistente_retorna_null(void) {
 void test_insercoes_multiplas_causam_split(void) {
     int buckets_iniciais = hash_get_num_buckets(h);
 
-    /* capacidade_bucket = 2 no setUp: a 3a insercao no mesmo bucket forca split */
     for (int i = 0; i < 20; i++) {
         int valor = i * 10;
         TEST_ASSERT_TRUE(hash_insert(h, (uint64_t)i, &valor, sizeof(int)));
@@ -117,7 +114,6 @@ void test_insercoes_multiplas_causam_split(void) {
 
     TEST_ASSERT_TRUE(hash_get_num_buckets(h) > buckets_iniciais);
 
-    /* Todos os 20 valores devem continuar buscaveis apos os splits */
     for (int i = 0; i < 20; i++) {
         size_t tamanho;
         int *resultado = hash_search(h, (uint64_t)i, &tamanho);
@@ -149,7 +145,6 @@ void test_insert_chave_duplicada_nao_trava(void) {
     size_t tamanho;
     int *resultado = hash_search(h, 1, &tamanho);
     TEST_ASSERT_NOT_NULL(resultado);
-    /* Nao garantimos qual das duas sera encontrada primeiro — so que uma existe */
     TEST_ASSERT_TRUE(*resultado == 5 || *resultado == 7);
     free(resultado);
 }

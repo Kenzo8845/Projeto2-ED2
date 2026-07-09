@@ -28,13 +28,10 @@ void test_mst_amplia_via_abaixo_da_velocidade(void) {
     grafo_add_vertice(g, "A", 0.0, 0.0);
     grafo_add_vertice(g, "B", 10.0, 0.0);
     
-    // vm = 30.0 (Abaixo do limite que vamos testar: 50.0)
     grafo_add_aresta(g, "A", "B", "Rua1", NULL, NULL, 10.0, 30.0);
     
-    // O limiar é 50.0. A rua tem 30.0, então deve entrar na MST e ser ampliada.
     mst_ampliar_vias(g, 50.0, callback_teste_mst, NULL);
     
-    // Pelo menos 1 callback deve ter sido chamado confirmando a ampliação
     TEST_ASSERT_GREATER_THAN_INT(0, arestas_ampliadas); 
 }
 

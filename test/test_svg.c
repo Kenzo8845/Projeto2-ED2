@@ -22,7 +22,7 @@ void test_svg_ciclo_de_vida_basico(void) {
     svg_texto(f, 50.0, 50.0, "Teste", "black", 12.0);
     svg_fechar(f);
     
-    // Se não quebrou (SegFault), a manipulação de ponteiros e fprintf está OK.
+    
     TEST_ASSERT_TRUE(1); 
 }
 

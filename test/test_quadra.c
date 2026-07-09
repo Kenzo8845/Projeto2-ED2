@@ -28,7 +28,6 @@ void test_quadra_valores_iniciais_corretos(void) {
 }
 
 void test_quadra_cores_iniciam_vazias(void) {
-    /* calloc zera a struct: sem cq definido, corp/corb devem ser string vazia */
     TEST_ASSERT_EQUAL_STRING("", quadra_getCorp(q));
     TEST_ASSERT_EQUAL_STRING("", quadra_getCorb(q));
     TEST_ASSERT_EQUAL_DOUBLE(0.0, quadra_getSw(q));

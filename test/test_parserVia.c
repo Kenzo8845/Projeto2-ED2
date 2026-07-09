@@ -71,7 +71,6 @@ void test_parser_via_insere_aresta_entre_vertices_existentes(void) {
 void test_parser_via_aresta_com_vertice_inexistente_nao_e_inserida(void) {
     escrever_via_temp(
         "v A 0.0 0.0\n"
-        /* B nunca foi declarado com 'v' */
         "e A B cep1 cep2 15.5 8.0 ruaTeste\n"
     );
 

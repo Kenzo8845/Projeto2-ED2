@@ -23,10 +23,9 @@ void test_parser_qry_arquivo_inexistente_ignorado(void) {
     FILE *txt = tmpfile();
     FILE *svg = tmpfile();
     
-    // Tentar processar um arquivo que não existe não deve dar crash
     parser_qry_processar("arquivo_inexistente_9999.qry", quadras, vias, txt, svg);
     
-    TEST_ASSERT_TRUE(1); // Passou se não deu SegFault
+    TEST_ASSERT_TRUE(1); 
     
     fclose(txt);
     fclose(svg);

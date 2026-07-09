@@ -28,7 +28,6 @@ void test_componentes_conexos_vertices_isolados(void) {
     grafo_add_vertice(g, "A", 0.0, 0.0);
     grafo_add_vertice(g, "B", 10.0, 10.0);
     
-    // Nenhuma aresta inserida. Devem ser 2 componentes isolados.
     int num_comp = componentes_conexos_calcular(g, 10.0, callback_teste_comp, NULL);
     TEST_ASSERT_EQUAL_INT(2, num_comp);
     TEST_ASSERT_EQUAL_INT(2, chamadas_callback);

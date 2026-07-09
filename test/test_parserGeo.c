@@ -9,7 +9,6 @@
 static Hash *quadras;
 static char  caminho_temp[64];
 
-/* Escreve o conteudo dado num arquivo .geo temporario e retorna seu caminho */
 static void escrever_geo_temp(const char *conteudo) {
     snprintf(caminho_temp, sizeof(caminho_temp), "temp_test_%d.geo", (int)getpid());
     FILE *f = fopen(caminho_temp, "w");
@@ -36,7 +35,6 @@ void tearDown(void) {
 void test_parser_geo_insere_uma_quadra(void) {
     escrever_geo_temp("q cep15 100.0 200.0 50.0 30.0\n");
 
-    /* svg_geo = NULL: parserGeo.c ja trata isso e nao tenta desenhar */
     parser_geo_processar(caminho_temp, quadras, NULL);
 
     uint64_t chave = hash_string_djb2("cep15");
@@ -89,7 +87,6 @@ void test_parser_geo_quadra_antes_do_cq_usa_cor_padrao(void) {
     Quadra q = (Quadra)hash_search(quadras, chave, &tamanho);
 
     TEST_ASSERT_NOT_NULL(q);
-    /* Antes de qualquer cq, corp/corb devem ficar com o padrao inicial do parser */
     TEST_ASSERT_EQUAL_STRING("gray", quadra_getCorp(q));
     TEST_ASSERT_EQUAL_STRING("black", quadra_getCorb(q));
 
@@ -124,7 +121,6 @@ void test_parser_geo_multiplas_quadras_sao_todas_inseridas(void) {
    ========================================================= */
 void test_parser_geo_arquivo_inexistente_nao_trava(void) {
     parser_geo_processar("arquivo_que_nao_existe_12345.geo", quadras, NULL);
-    /* Se chegou ate aqui sem crash, o teste passa. Hash deve continuar vazia. */
     uint64_t chave = hash_string_djb2("qualquer");
     size_t tamanho;
     void *resultado = hash_search(quadras, chave, &tamanho);
