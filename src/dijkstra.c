@@ -5,19 +5,15 @@
 
 #include "../include/dijkstra.h"
 
-/* ==========================================================================
-   MIN-HEAP (fila de prioridade) — cresce dinamicamente, sem limite fixo.
-   ========================================================================== */
-
 typedef struct {
-    int    v_idx;
+    int v_idx;
     double prioridade;
 } HeapNo;
 
 typedef struct {
     HeapNo *dados;
-    int     tamanho;
-    int     capacidade;
+    int tamanho;
+    int capacidade;
 } MinHeap;
 
 static MinHeap *heap_create(int capacidade_inicial) {
@@ -67,7 +63,6 @@ static void heap_push(MinHeap *h, int v_idx, double prioridade) {
     }
 }
 
-// Pré-condição: h->tamanho > 0.
 static HeapNo heap_pop(MinHeap *h) {
     HeapNo topo = h->dados[0];
 
@@ -97,17 +92,16 @@ static HeapNo heap_pop(MinHeap *h) {
    ========================================================================== */
 
 typedef struct {
-    int      origem_atual;
-    bool     por_tempo;
-    double  *distancias;
-    int     *antecessores;
+    int origem_atual;
+    bool por_tempo;
+    double *distancias;
+    int *antecessores;
     MinHeap *heap;
 } ContextoDijkstra;
 
 static void avaliar_vizinho_cb(int destino, double cmp, double vm, void *contexto) {
     ContextoDijkstra *ctx = (ContextoDijkstra *)contexto;
 
-    // vm <= 0 indicaria trecho intransitável; evita divisão por zero.
     double custo_aresta = ctx->por_tempo ? (vm > 0.0 ? cmp / vm : DBL_MAX) : cmp;
     if (custo_aresta >= DBL_MAX) return;
 
@@ -120,8 +114,7 @@ static void avaliar_vizinho_cb(int destino, double cmp, double vm, void *context
     }
 }
 
-bool dijkstra_buscar(const Grafo *g, int idx_origem, int idx_destino, bool por_tempo,
-                     int *out_antecessores, double *out_distancias) {
+bool dijkstra_buscar(const Grafo *g, int idx_origem, int idx_destino, bool por_tempo, int *out_antecessores, double *out_distancias) {
     int num_v = grafo_get_num_vertices(g);
     if (idx_origem < 0 || idx_origem >= num_v || idx_destino < 0 || idx_destino >= num_v) {
         return false;
@@ -153,7 +146,7 @@ bool dijkstra_buscar(const Grafo *g, int idx_origem, int idx_destino, bool por_t
         HeapNo atual = heap_pop(heap);
         int u = atual.v_idx;
 
-        if (visitados[u]) continue; // entrada obsoleta (lazy deletion)
+        if (visitados[u]) continue;
         visitados[u] = true;
 
         if (u == idx_destino) {

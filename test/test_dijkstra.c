@@ -8,19 +8,6 @@ static Grafo *g;
 static int    *antecessores;
 static double *distancias;
 
-/*
- * Grafo de teste (direcionado):
- *
- *   A --10--> B --10--> D
- *   |                   ^
- *   +--------30---------+
- *   A --5--> C   (C nao alcanca ninguem)
- *
- * Velocidades (vm): A->B = 5, B->D = 5, A->D = 30, A->C = 5
- * Caminho mais curto A->D:  A->D direto (cmp=30)
- * Caminho mais rapido A->D: depende de cmp/vm — A->B->D (10/5 + 10/5 = 4s)
- *                           vs A->D direto (30/30 = 1s) -> direto vence
- */
 static void montar_grafo_padrao(void) {
     g = grafo_create(8);
 
@@ -28,7 +15,6 @@ static void montar_grafo_padrao(void) {
     grafo_add_vertice(g, "B", 10.0, 0.0);
     grafo_add_vertice(g, "C", 0.0, 10.0);
     grafo_add_vertice(g, "D", 20.0, 0.0);
-    /* "E" fica isolado — sem arestas de/para ele — usado no teste de inalcancavel */
     grafo_add_vertice(g, "E", 50.0, 50.0);
 
     grafo_add_aresta(g, "A", "B", "ruaAB", NULL, NULL, 10.0, 5.0);
@@ -41,7 +27,7 @@ void setUp(void) {
     montar_grafo_padrao();
     int n = grafo_get_num_vertices(g);
     antecessores = malloc(sizeof(int) * (size_t)n);
-    distancias   = malloc(sizeof(double) * (size_t)n);
+    distancias = malloc(sizeof(double) * (size_t)n);
 }
 
 void tearDown(void) {
@@ -74,16 +60,12 @@ void test_dijkstra_por_distancia_prefere_caminho_mais_curto(void) {
 }
 
 void test_dijkstra_por_tempo_pode_preferir_caminho_diferente(void) {
-    /* Por tempo: A->D direto = 30/30 = 1.0s
-                  A->B->D    = 10/5 + 10/5 = 4.0s
-       O caminho direto deve vencer quando o criterio e tempo. */
     int idx_a = grafo_find_vertice(g, "A");
     int idx_d = grafo_find_vertice(g, "D");
 
     dijkstra_buscar(g, idx_a, idx_d, true, antecessores, distancias);
 
     TEST_ASSERT_EQUAL_DOUBLE(1.0, distancias[idx_d]);
-    /* O antecessor de D deve ser A diretamente (nao B) */
     TEST_ASSERT_EQUAL_INT(idx_a, antecessores[idx_d]);
 }
 

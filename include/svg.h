@@ -7,6 +7,7 @@
 
 /**
  * Este módulo lida com a escrita do arquivo svg e gera as saídas gráficas do sistema. 
+ * Também é responsavel pelo ciclo de vida do arquivo svg. Quando abri-lo e fecha-lo.
  * É desacoplado do módulo Grafo: 
  * Ele só sabe desenhar formas geométricas rimitivas (retângulos, segmentos, textos, percursos animados). 
  * Quem decide oque desenhar (iterando o grafo, o resultado do Dijkstra, etc.) é o chamador (main.c / parser_qry.c).
