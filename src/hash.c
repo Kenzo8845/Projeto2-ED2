@@ -9,27 +9,26 @@
    ESTRUTURAS INTERNAS
    ========================================================================== */
 
-// Um registro guarda sua própria cópia dos dados.
 typedef struct {
     uint64_t key;
     void    *data;
     size_t   size;
 } Record;
 
-// Bucket: array dinâmico de registros + profundidade local.
+
 typedef struct Bucket {
-    int     local_depth;
-    int     count;      // registros válidos atualmente no bucket
-    int     capacity;    // capacidade máxima (== capacidade_bucket da hash)
+    int local_depth;
+    int count;      // registros válidos atualmente no bucket
+    int capacity;    // capacidade máxima (== capacidade_bucket da hash)
     Record *records;    // array de tamanho 'capacity'
 } Bucket;
 
-// Estrutura principal — opaca para o usuário (definida apenas aqui).
+
 struct Hash {
-    int      global_depth;
-    int      dir_size;        // 2^global_depth
+    int global_depth;
+    int dir_size;        // 2^global_depth
     Bucket **directory;       // directory[i] = ponteiro para o bucket
-    int      bucket_capacity; // capacidade máxima de registros por bucket
+    int  bucket_capacity; // capacidade máxima de registros por bucket
 };
 
 /* ==========================================================================
@@ -64,11 +63,9 @@ static void bucket_destroy(Bucket *b) {
 
 static bool insert_into_bucket(Hash *h, Bucket *b, uint64_t key, const void *data, size_t size);
 
-// Divide um bucket cheio em dois, redistribuindo seus registros.
 static void split_bucket(Hash *h, Bucket *old_bucket) {
     int old_depth = old_bucket->local_depth;
 
-    // Se a profundidade local já atingiu a global, dobra o diretório.
     if (old_depth == h->global_depth) {
         int new_size = h->dir_size * 2;
         Bucket **new_dir = realloc(h->directory, (size_t)new_size * sizeof(Bucket *));
@@ -84,14 +81,12 @@ static void split_bucket(Hash *h, Bucket *old_bucket) {
     Bucket *new_bucket = bucket_create(old_depth + 1, h->bucket_capacity);
     old_bucket->local_depth = old_depth + 1;
 
-    // Redireciona as entradas do diretório que devem apontar para o novo bucket.
     for (int i = 0; i < h->dir_size; i++) {
         if (h->directory[i] == old_bucket && ((i >> old_depth) & 1)) {
             h->directory[i] = new_bucket;
         }
     }
 
-    // Redistribui os registros do bucket antigo entre ele mesmo e o novo.
     Record *old_records = old_bucket->records;
     int old_count = old_bucket->count;
 
@@ -102,8 +97,6 @@ static void split_bucket(Hash *h, Bucket *old_bucket) {
     for (int i = 0; i < old_count; i++) {
         int idx = hash_index(old_records[i].key, h->global_depth);
         Bucket *destino = h->directory[idx];
-        // Os dados já são uma cópia própria do registro; repassamos o ponteiro
-        // (sem copiar de novo) para o bucket de destino.
         Record *slot = &destino->records[destino->count++];
         slot->key  = old_records[i].key;
         slot->data = old_records[i].data;
@@ -156,8 +149,6 @@ Hash *hash_create(int capacidade_bucket) {
 void hash_destroy(Hash *h) {
     if (h == NULL) return;
 
-    // Cada bucket pode estar referenciado por múltiplas entradas do 
-    // diretório; marcamos os já destruídos para não liberar duas vezes.
     Bucket **destruidos = calloc((size_t)h->dir_size, sizeof(Bucket *));
     assert(destruidos != NULL);
     int n_destruidos = 0;
