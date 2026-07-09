@@ -23,8 +23,6 @@ void svg_iniciar_com_bbox(FILE *arquivo, double minx, double miny,
     double w = (maxx - minx) + 2.0 * margem;
     double h = (maxy - miny) + 2.0 * margem;
 
-    /* Largura/altura degeneradas (bbox vazia ou com 1 ponto só) recebem um
-       tamanho mínimo para o SVG não colapsar. */
     if (w <= 0.0) w = 100.0;
     if (h <= 0.0) h = 100.0;
 
@@ -36,7 +34,6 @@ void svg_iniciar_com_bbox(FILE *arquivo, double minx, double miny,
             x, y, w, h);
 }
 
-/* Contexto usado pelo callback de cálculo de bbox das quadras */
 typedef struct {
     double minx, miny, maxx, maxy;
     bool   tem_dado;
@@ -207,7 +204,6 @@ void svg_desenhar_percurso_animado(FILE *arquivo, const double *xs, const double
     assert(arquivo != NULL && xs != NULL && ys != NULL && cor != NULL && path_id != NULL);
     assert(n_pontos >= 2);
 
-    // Constroi o atributo 'd' do path: "M x0,y0 L x1,y1 L x2,y2 ..."
     fprintf(arquivo, "\t<path id=\"%s\" d=\"M %.2f,%.2f", path_id, xs[0], ys[0]);
     for (int i = 1; i < n_pontos; i++) {
         fprintf(arquivo, " L %.2f,%.2f", xs[i], ys[i]);
